@@ -4,6 +4,11 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>GeneticAlgoKnapstack</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GeneticAlgorithm\GeneticAlgorithm.csproj" />
+    </ItemGroup>
 
 </Project>
