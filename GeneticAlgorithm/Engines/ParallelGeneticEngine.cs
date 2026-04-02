@@ -3,12 +3,13 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public class ParallelGeneticAlgorithmEngine<T> : GeneticAlgorithmEngine<T>
+public class ParallelGeneticEngine<T> : ParallelBaseGeneticEngine<T>
 {
-    public ParallelGeneticAlgorithmEngine(IFitnessEvaluator<T> fitnessEvaluator,
-        ICrossoverStrategy<T> crossoverStrategy, IMutationStrategy<T> mutationStrategy,
-        ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory, int threadCount) : base(
-        fitnessEvaluator, crossoverStrategy, mutationStrategy, selectionStrategy, factory, threadCount)
+    public ParallelGeneticEngine(IFitnessEvaluator<T> fitnessEvaluator, ICrossoverStrategy<T> crossoverStrategy,
+        IMutationStrategy<T> mutationStrategy, ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory,
+        int populationSize, int elitismCount, int mutationRate, int threadCount) : base(fitnessEvaluator,
+        crossoverStrategy, mutationStrategy, selectionStrategy, factory, populationSize, elitismCount, mutationRate,
+        threadCount)
     {
     }
 

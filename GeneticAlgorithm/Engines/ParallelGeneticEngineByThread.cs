@@ -2,16 +2,18 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public class ParallelGeneticAlgorithmEngineByThread<T> : GeneticAlgorithmEngine<T>
+public class ParallelGeneticEngineByThread<T> : ParallelBaseGeneticEngine<T>
 {
     private readonly Thread[] _threads;
 
-    public ParallelGeneticAlgorithmEngineByThread(IFitnessEvaluator<T> fitnessEvaluator,
-        ICrossoverStrategy<T> crossoverStrategy, IMutationStrategy<T> mutationStrategy,
-        ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory, int threadCount) : base(fitnessEvaluator,
-        crossoverStrategy, mutationStrategy, selectionStrategy, factory, threadCount)
+
+    public ParallelGeneticEngineByThread(IFitnessEvaluator<T> fitnessEvaluator, ICrossoverStrategy<T> crossoverStrategy,
+        IMutationStrategy<T> mutationStrategy, ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory,
+        int populationSize, int elitismCount, int mutationRate, int threadCount, Thread[] threads) : base(
+        fitnessEvaluator, crossoverStrategy, mutationStrategy, selectionStrategy, factory, populationSize, elitismCount,
+        mutationRate, threadCount)
     {
-        _threads = new Thread[threadCount];
+        _threads = threads;
     }
 
     protected override IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes)
