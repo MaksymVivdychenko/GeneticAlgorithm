@@ -9,11 +9,11 @@ public class ParallelGeneticEngineByThread<T> : ParallelBaseGeneticEngine<T>
 
     public ParallelGeneticEngineByThread(IFitnessEvaluator<T> fitnessEvaluator, ICrossoverStrategy<T> crossoverStrategy,
         IMutationStrategy<T> mutationStrategy, ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory,
-        int populationSize, int elitismCount, int mutationRate, int threadCount, Thread[] threads) : base(
+        int populationSize, int elitismCount, int mutationRate, int threadCount) : base(
         fitnessEvaluator, crossoverStrategy, mutationStrategy, selectionStrategy, factory, populationSize, elitismCount,
         mutationRate, threadCount)
     {
-        _threads = threads;
+        _threads = new Thread[threadCount];
     }
 
     protected override IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes)
