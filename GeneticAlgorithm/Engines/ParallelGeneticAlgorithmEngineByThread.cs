@@ -5,6 +5,7 @@ namespace GeneticAlgorithm.Engines;
 public class ParallelGeneticAlgorithmEngineByThread<T> : GeneticAlgorithmEngine<T>
 {
     private readonly Thread[] _threads;
+
     public ParallelGeneticAlgorithmEngineByThread(IFitnessEvaluator<T> fitnessEvaluator,
         ICrossoverStrategy<T> crossoverStrategy, IMutationStrategy<T> mutationStrategy,
         ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory, int threadCount) : base(fitnessEvaluator,
