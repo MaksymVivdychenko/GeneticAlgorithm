@@ -2,13 +2,18 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public class ParallelGeneticAlgorithmEngineByThread<T> : GeneticAlgorithmEngine<T>
+public class ParallelGeneticEngineByThread<T> : ParallelBaseGeneticEngine<T>
 {
-    public ParallelGeneticAlgorithmEngineByThread(IFitnessEvaluator<T> fitnessEvaluator,
-        ICrossoverStrategy<T> crossoverStrategy, IMutationStrategy<T> mutationStrategy,
-        ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory, int threadCount) : base(fitnessEvaluator,
-        crossoverStrategy, mutationStrategy, selectionStrategy, factory, threadCount)
+    private readonly Thread[] _threads;
+
+
+    public ParallelGeneticEngineByThread(IFitnessEvaluator<T> fitnessEvaluator, ICrossoverStrategy<T> crossoverStrategy,
+        IMutationStrategy<T> mutationStrategy, ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory,
+        int populationSize, int elitismCount, int mutationRate, int threadCount) : base(
+        fitnessEvaluator, crossoverStrategy, mutationStrategy, selectionStrategy, factory, populationSize, elitismCount,
+        mutationRate, threadCount)
     {
+        _threads = new Thread[threadCount];
     }
 
     protected override IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes)
@@ -18,7 +23,6 @@ public class ParallelGeneticAlgorithmEngineByThread<T> : GeneticAlgorithmEngine<
 
         var evaluatedPopulation = new Individual<T>[totalItems];
         int threadCount = totalItems > ThreadCount ? ThreadCount : totalItems;
-        var threads =  new Thread[threadCount];
         int chunkSize = totalItems / threadCount;
         int remainder = totalItems % threadCount;
         int startIndex;
@@ -36,7 +40,7 @@ public class ParallelGeneticAlgorithmEngineByThread<T> : GeneticAlgorithmEngine<
             int finalStartIndex = startIndex;
             int finalEndIndex = endIndex;
 
-            threads[i] = new Thread(() =>
+            _threads[i] = new Thread(() =>
             {
                 for (int j = finalStartIndex; j < finalEndIndex; j++)
                 {
@@ -49,10 +53,10 @@ public class ParallelGeneticAlgorithmEngineByThread<T> : GeneticAlgorithmEngine<
                 }
             });
 
-            threads[i].Start();
+            _threads[i].Start();
         }
 
-        foreach (var thread in threads)
+        foreach (var thread in _threads)
         {
             thread.Join();
         }

@@ -3,35 +3,41 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public class GeneticAlgorithmEngine<T>
+public abstract class BaseGeneticEngine<T>
 {
     protected readonly IFitnessEvaluator<T> FitnessEvaluator;
     private readonly ICrossoverStrategy<T> _crossoverStrategy;
     private readonly IMutationStrategy<T> _mutationStrategy;
     private readonly ISelectionStrategy<T> _selectionStrategy;
     private readonly IIndividualFactory<T> _factory;
-    protected readonly int ThreadCount;
+    private readonly int _populationSize;
+    private readonly int _elitismCount;
+    private readonly int _mutationRate;
 
-    public GeneticAlgorithmEngine(IFitnessEvaluator<T> fitnessEvaluator,
+    public BaseGeneticEngine(IFitnessEvaluator<T> fitnessEvaluator,
         ICrossoverStrategy<T> crossoverStrategy,
         IMutationStrategy<T> mutationStrategy,
         ISelectionStrategy<T> selectionStrategy,
         IIndividualFactory<T> factory,
-        int threadCount
+        int populationSize,
+        int elitismCount,
+        int mutationRate
         )
     {
-        this.FitnessEvaluator = fitnessEvaluator;
+        FitnessEvaluator = fitnessEvaluator;
         _crossoverStrategy = crossoverStrategy;
         _mutationStrategy = mutationStrategy;
         _selectionStrategy = selectionStrategy;
         _factory = factory;
-        ThreadCount = threadCount;
+        _populationSize = populationSize;
+        _elitismCount = elitismCount;
+        _mutationRate = mutationRate;
     }
 
-    public T Run(int generations, int populationSize, int elitismCount, int mutationRate)
+    public T Run(int generations)
     {
-        var initialChromosomes = new List<T>(populationSize);
-        for (int i = 0; i < populationSize; i++)
+        var initialChromosomes = new List<T>(_populationSize);
+        for (int i = 0; i < _populationSize; i++)
         {
             initialChromosomes.Add(_factory.CreateRandomChromosome());
         }
@@ -46,13 +52,13 @@ public class GeneticAlgorithmEngine<T>
                 Console.WriteLine($"Generation: {i}");
             }
             var elitaries = population
-                .TakeMax(p => p.Fitness, elitismCount);
+                .TakeMax(p => p.Fitness, _elitismCount);
             List<T> chromosomes = new List<T>();
-            for (int j = 0; j < population.Count - elitismCount; j++)
+            for (int j = 0; j < population.Count - _elitismCount; j++)
             {
                 var parents = _selectionStrategy.Select(population, 2).ToArray();
                 var child = _crossoverStrategy.Crossover(parents[0].Chromosome, parents[1].Chromosome);
-                if (rand.Next(100) < mutationRate)
+                if (rand.Next(100) < _mutationRate)
                 {
                     child = _mutationStrategy.Mutate(child);
                 }
@@ -68,19 +74,5 @@ public class GeneticAlgorithmEngine<T>
         return population.MaxBy(p => p.Fitness)!.Chromosome;
     }
 
-    protected virtual IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes)
-    {
-        var evaluatedPopulation = new List<Individual<T>>();
-
-        foreach (var c in chromosomes)
-        {
-            evaluatedPopulation.Add(new Individual<T>
-            {
-                Chromosome = c,
-                Fitness = FitnessEvaluator.EvaluateFitness(c)
-            });
-        }
-
-        return evaluatedPopulation;
-    }
+    protected abstract IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes);
 }
