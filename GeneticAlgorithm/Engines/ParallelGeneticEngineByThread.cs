@@ -2,13 +2,13 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public class ParallelGeneticEngineByThread<T> : ParallelBaseGeneticEngine<T>
+public class ParallelGeneticEngineByThread<TChromosome> : ParallelBaseGeneticEngine<TChromosome>
 {
     private readonly Thread[] _threads;
 
 
-    public ParallelGeneticEngineByThread(IFitnessEvaluator<T> fitnessEvaluator, ICrossoverStrategy<T> crossoverStrategy,
-        IMutationStrategy<T> mutationStrategy, ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory,
+    public ParallelGeneticEngineByThread(IFitnessEvaluator<TChromosome> fitnessEvaluator, ICrossoverStrategy<TChromosome> crossoverStrategy,
+        IMutationStrategy<TChromosome> mutationStrategy, ISelectionStrategy<TChromosome> selectionStrategy, IIndividualFactory<TChromosome> factory,
         int populationSize, int elitismCount, int mutationRate, int threadCount) : base(
         fitnessEvaluator, crossoverStrategy, mutationStrategy, selectionStrategy, factory, populationSize, elitismCount,
         mutationRate, threadCount)
@@ -16,12 +16,12 @@ public class ParallelGeneticEngineByThread<T> : ParallelBaseGeneticEngine<T>
         _threads = new Thread[threadCount];
     }
 
-    protected override IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes)
+    protected override IList<Individual<TChromosome>> FitPopulation(IEnumerable<TChromosome> chromosomes)
     {
         var chromosomesArray = chromosomes.ToArray();
         int totalItems = chromosomesArray.Length;
 
-        var evaluatedPopulation = new Individual<T>[totalItems];
+        var evaluatedPopulation = new Individual<TChromosome>[totalItems];
         int threadCount = totalItems > ThreadCount ? ThreadCount : totalItems;
         int chunkSize = totalItems / threadCount;
         int remainder = totalItems % threadCount;
@@ -45,7 +45,7 @@ public class ParallelGeneticEngineByThread<T> : ParallelBaseGeneticEngine<T>
                 for (int j = finalStartIndex; j < finalEndIndex; j++)
                 {
                     var fitness = FitnessEvaluator.EvaluateFitness(chromosomesArray[j]);
-                    evaluatedPopulation[j] = new Individual<T>
+                    evaluatedPopulation[j] = new Individual<TChromosome>
                     {
                         Chromosome = chromosomesArray[j],
                         Fitness = fitness

@@ -3,19 +3,19 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public class ParallelGeneticEngine<T> : ParallelBaseGeneticEngine<T>
+public class ParallelGeneticEngine<TChromosome> : ParallelBaseGeneticEngine<TChromosome>
 {
-    public ParallelGeneticEngine(IFitnessEvaluator<T> fitnessEvaluator, ICrossoverStrategy<T> crossoverStrategy,
-        IMutationStrategy<T> mutationStrategy, ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory,
+    public ParallelGeneticEngine(IFitnessEvaluator<TChromosome> fitnessEvaluator, ICrossoverStrategy<TChromosome> crossoverStrategy,
+        IMutationStrategy<TChromosome> mutationStrategy, ISelectionStrategy<TChromosome> selectionStrategy, IIndividualFactory<TChromosome> factory,
         int populationSize, int elitismCount, int mutationRate, int threadCount) : base(fitnessEvaluator,
         crossoverStrategy, mutationStrategy, selectionStrategy, factory, populationSize, elitismCount, mutationRate,
         threadCount)
     {
     }
 
-    protected override IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes)
+    protected override IList<Individual<TChromosome>> FitPopulation(IEnumerable<TChromosome> chromosomes)
     {
-        var evaluatedPopulation = new ConcurrentBag<Individual<T>>();
+        var evaluatedPopulation = new ConcurrentBag<Individual<TChromosome>>();
         var options = new ParallelOptions()
         {
             MaxDegreeOfParallelism = ThreadCount
@@ -23,7 +23,7 @@ public class ParallelGeneticEngine<T> : ParallelBaseGeneticEngine<T>
 
         Parallel.ForEach(chromosomes, options, c =>
         {
-            evaluatedPopulation.Add(new Individual<T>
+            evaluatedPopulation.Add(new Individual<TChromosome>
             {
                 Chromosome = c,
                 Fitness = FitnessEvaluator.EvaluateFitness(c)

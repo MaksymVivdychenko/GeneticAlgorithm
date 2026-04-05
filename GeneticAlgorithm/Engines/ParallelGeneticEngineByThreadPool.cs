@@ -2,21 +2,21 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public class ParallelGeneticEngineByThreadPool<T> : ParallelBaseGeneticEngine<T>
+public class ParallelGeneticEngineByThreadPool<TChromosome> : ParallelBaseGeneticEngine<TChromosome>
 {
-    public ParallelGeneticEngineByThreadPool(IFitnessEvaluator<T> fitnessEvaluator,
-        ICrossoverStrategy<T> crossoverStrategy, IMutationStrategy<T> mutationStrategy,
-        ISelectionStrategy<T> selectionStrategy, IIndividualFactory<T> factory, int populationSize, int elitismCount,
+    public ParallelGeneticEngineByThreadPool(IFitnessEvaluator<TChromosome> fitnessEvaluator,
+        ICrossoverStrategy<TChromosome> crossoverStrategy, IMutationStrategy<TChromosome> mutationStrategy,
+        ISelectionStrategy<TChromosome> selectionStrategy, IIndividualFactory<TChromosome> factory, int populationSize, int elitismCount,
         int mutationRate, int threadCount) : base(fitnessEvaluator, crossoverStrategy, mutationStrategy,
         selectionStrategy, factory, populationSize, elitismCount, mutationRate, threadCount)
     {
     }
 
-    protected override IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes)
+    protected override IList<Individual<TChromosome>> FitPopulation(IEnumerable<TChromosome> chromosomes)
     {
         var chromosomesArray = chromosomes.ToArray();
         int totalItems = chromosomesArray.Length;
-        var evaluatedPopulation = new Individual<T>[totalItems];
+        var evaluatedPopulation = new Individual<TChromosome>[totalItems];
 
         int threadCount = totalItems > ThreadCount ? ThreadCount : totalItems;
         int chunkSize = totalItems / threadCount;
@@ -47,7 +47,7 @@ public class ParallelGeneticEngineByThreadPool<T> : ParallelBaseGeneticEngine<T>
                         for (int j = finalStartIndex; j < finalEndIndex; j++)
                         {
                             var fitness = FitnessEvaluator.EvaluateFitness(chromosomesArray[j]);
-                            evaluatedPopulation[j] = new Individual<T>
+                            evaluatedPopulation[j] = new Individual<TChromosome>
                             {
                                 Chromosome = chromosomesArray[j],
                                 Fitness = fitness

@@ -3,22 +3,22 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
-public abstract class BaseGeneticEngine<T>
+public abstract class BaseGeneticEngine<TChromosome>
 {
-    protected readonly IFitnessEvaluator<T> FitnessEvaluator;
-    private readonly ICrossoverStrategy<T> _crossoverStrategy;
-    private readonly IMutationStrategy<T> _mutationStrategy;
-    private readonly ISelectionStrategy<T> _selectionStrategy;
-    private readonly IIndividualFactory<T> _factory;
+    protected readonly IFitnessEvaluator<TChromosome> FitnessEvaluator;
+    private readonly ICrossoverStrategy<TChromosome> _crossoverStrategy;
+    private readonly IMutationStrategy<TChromosome> _mutationStrategy;
+    private readonly ISelectionStrategy<TChromosome> _selectionStrategy;
+    private readonly IIndividualFactory<TChromosome> _factory;
     private readonly int _populationSize;
     private readonly int _elitismCount;
     private readonly int _mutationRate;
 
-    public BaseGeneticEngine(IFitnessEvaluator<T> fitnessEvaluator,
-        ICrossoverStrategy<T> crossoverStrategy,
-        IMutationStrategy<T> mutationStrategy,
-        ISelectionStrategy<T> selectionStrategy,
-        IIndividualFactory<T> factory,
+    public BaseGeneticEngine(IFitnessEvaluator<TChromosome> fitnessEvaluator,
+        ICrossoverStrategy<TChromosome> crossoverStrategy,
+        IMutationStrategy<TChromosome> mutationStrategy,
+        ISelectionStrategy<TChromosome> selectionStrategy,
+        IIndividualFactory<TChromosome> factory,
         int populationSize,
         int elitismCount,
         int mutationRate
@@ -34,9 +34,9 @@ public abstract class BaseGeneticEngine<T>
         _mutationRate = mutationRate;
     }
 
-    public T Run(int generations)
+    public TChromosome Run(int generations)
     {
-        var initialChromosomes = new List<T>(_populationSize);
+        var initialChromosomes = new List<TChromosome>(_populationSize);
         for (int i = 0; i < _populationSize; i++)
         {
             initialChromosomes.Add(_factory.CreateRandomChromosome());
@@ -47,13 +47,9 @@ public abstract class BaseGeneticEngine<T>
         var population = FitPopulation(initialChromosomes);
         for (int i = 0; i < generations; i++)
         {
-            if (i % 100 == 0)
-            {
-                Console.WriteLine($"Generation: {i}");
-            }
-            var elitaries = population
+            var eliteIndividuals = population
                 .TakeMax(p => p.Fitness, _elitismCount);
-            List<T> chromosomes = new List<T>();
+            List<TChromosome> chromosomes = new List<TChromosome>();
             for (int j = 0; j < population.Count - _elitismCount; j++)
             {
                 var parents = _selectionStrategy.Select(population, 2).ToArray();
@@ -67,12 +63,12 @@ public abstract class BaseGeneticEngine<T>
             }
 
             var evaluatedPopulation = FitPopulation(chromosomes).ToList();
-            evaluatedPopulation.AddRange(elitaries);
+            evaluatedPopulation.AddRange(eliteIndividuals);
             population = evaluatedPopulation;
         }
 
         return population.MaxBy(p => p.Fitness)!.Chromosome;
     }
 
-    protected abstract IList<Individual<T>> FitPopulation(IEnumerable<T> chromosomes);
+    protected abstract IList<Individual<TChromosome>> FitPopulation(IEnumerable<TChromosome> chromosomes);
 }
