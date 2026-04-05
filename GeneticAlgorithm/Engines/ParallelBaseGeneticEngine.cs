@@ -4,7 +4,7 @@ namespace GeneticAlgorithm.Engines;
 
 public abstract class ParallelBaseGeneticEngine<TChromosome> : BaseGeneticEngine<TChromosome>
 {
-    protected readonly int ThreadCount;
+    public int ThreadCount { get; set; }
 
     protected ParallelBaseGeneticEngine(IFitnessEvaluator<TChromosome> fitnessEvaluator, ICrossoverStrategy<TChromosome> crossoverStrategy,
         IMutationStrategy<TChromosome> mutationStrategy, ISelectionStrategy<TChromosome> selectionStrategy, IIndividualFactory<TChromosome> factory,

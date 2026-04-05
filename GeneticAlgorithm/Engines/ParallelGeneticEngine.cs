@@ -15,21 +15,22 @@ public class ParallelGeneticEngine<TChromosome> : ParallelBaseGeneticEngine<TChr
 
     protected override IList<Individual<TChromosome>> FitPopulation(IEnumerable<TChromosome> chromosomes)
     {
-        var evaluatedPopulation = new ConcurrentBag<Individual<TChromosome>>();
+        var arrayChromosomes = chromosomes.ToArray();
+        var evaluatedPopulation = new Individual<TChromosome>[arrayChromosomes.Length];
         var options = new ParallelOptions()
         {
             MaxDegreeOfParallelism = ThreadCount
         };
 
-        Parallel.ForEach(chromosomes, options, c =>
+        Parallel.For(0, arrayChromosomes.Length, options, i  =>
         {
-            evaluatedPopulation.Add(new Individual<TChromosome>
+            evaluatedPopulation[i] = new Individual<TChromosome>
             {
-                Chromosome = c,
-                Fitness = FitnessEvaluator.EvaluateFitness(c)
-            });
+                Chromosome = arrayChromosomes[i],
+                Fitness = FitnessEvaluator.EvaluateFitness(arrayChromosomes[i])
+            };
         });
 
-        return evaluatedPopulation.ToList();
+        return evaluatedPopulation;
     }
 }

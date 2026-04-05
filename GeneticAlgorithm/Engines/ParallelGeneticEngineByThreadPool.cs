@@ -1,72 +1,61 @@
+using System.Collections.Concurrent;
 using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Engines;
 
 public class ParallelGeneticEngineByThreadPool<TChromosome> : ParallelBaseGeneticEngine<TChromosome>
 {
-    public ParallelGeneticEngineByThreadPool(IFitnessEvaluator<TChromosome> fitnessEvaluator,
-        ICrossoverStrategy<TChromosome> crossoverStrategy, IMutationStrategy<TChromosome> mutationStrategy,
-        ISelectionStrategy<TChromosome> selectionStrategy, IIndividualFactory<TChromosome> factory, int populationSize, int elitismCount,
-        int mutationRate, int threadCount) : base(fitnessEvaluator, crossoverStrategy, mutationStrategy,
-        selectionStrategy, factory, populationSize, elitismCount, mutationRate, threadCount)
+    public ParallelGeneticEngineByThreadPool(IFitnessEvaluator<TChromosome> fitnessEvaluator, ICrossoverStrategy<TChromosome> crossoverStrategy,
+        IMutationStrategy<TChromosome> mutationStrategy, ISelectionStrategy<TChromosome> selectionStrategy, IIndividualFactory<TChromosome> factory,
+        int populationSize, int elitismCount, int mutationRate, int threadCount) : base(fitnessEvaluator,
+        crossoverStrategy, mutationStrategy, selectionStrategy, factory, populationSize, elitismCount, mutationRate,
+        threadCount)
     {
     }
 
     protected override IList<Individual<TChromosome>> FitPopulation(IEnumerable<TChromosome> chromosomes)
     {
-        var chromosomesArray = chromosomes.ToArray();
-        int totalItems = chromosomesArray.Length;
-        var evaluatedPopulation = new Individual<TChromosome>[totalItems];
+        var array = chromosomes as TChromosome[] ?? chromosomes.ToArray();
+        int totalItems = array.Length;
+        var results = new Individual<TChromosome>[totalItems];
+        
+        int actualThreads = Math.Min(ThreadCount, totalItems);
+    
+        int baseChunkSize = totalItems / actualThreads;
+        int remainder = totalItems % actualThreads;
 
-        int threadCount = totalItems > ThreadCount ? ThreadCount : totalItems;
-        int chunkSize = totalItems / threadCount;
-        int remainder = totalItems % threadCount;
+        using var finishedSignal = new CountdownEvent(actualThreads);
 
-        int pendingTasks = threadCount;
-        int startIndex;
-        int endIndex = 0;
-
-        using (var doneEvent = new ManualResetEvent(false))
+        int currentStart = 0;
+        for (int i = 0; i < actualThreads; i++)
         {
-            for (int i = 0; i < threadCount; i++)
+            int currentChunkSize = baseChunkSize + (i < remainder ? 1 : 0);
+            int start = currentStart;
+            int end = start + currentChunkSize;
+            currentStart = end;
+            
+            ThreadPool.QueueUserWorkItem(_ => 
             {
-                startIndex = endIndex;
-                endIndex = startIndex + chunkSize;
-                if (remainder > 0)
+                try
                 {
-                    endIndex++;
-                    remainder--;
+                    for (int j = start; j < end; j++)
+                    {
+                        results[j] = new Individual<TChromosome>
+                        {
+                            Chromosome = array[j],
+                            Fitness = FitnessEvaluator.EvaluateFitness(array[j])
+                        };
+                    }
                 }
-
-                int finalStartIndex = startIndex;
-                int finalEndIndex = endIndex;
-                ThreadPool.QueueUserWorkItem(_ =>
+                finally
                 {
-                    try
-                    {
-                        for (int j = finalStartIndex; j < finalEndIndex; j++)
-                        {
-                            var fitness = FitnessEvaluator.EvaluateFitness(chromosomesArray[j]);
-                            evaluatedPopulation[j] = new Individual<TChromosome>
-                            {
-                                Chromosome = chromosomesArray[j],
-                                Fitness = fitness
-                            };
-                        }
-                    }
-                    finally
-                    {
-                        if (Interlocked.Decrement(ref pendingTasks) == 0)
-                        {
-                            doneEvent.Set();
-                        }
-                    }
-                });
-            }
-
-            doneEvent.WaitOne();
+                    finishedSignal.Signal();
+                }
+            });
         }
-
-        return evaluatedPopulation;
+        
+        finishedSignal.Wait();
+    
+        return results;
     }
 }

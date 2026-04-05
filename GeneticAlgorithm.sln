@@ -2,15 +2,15 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlgorithm", "GeneticAlgorithm\GeneticAlgorithm.csproj", "{74B954B7-7EA4-4961-B121-D87D4FEE8252}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlgoKnapsack", "GeneticAlgoKnapsack\GeneticAlgoKnapsack.csproj", "{453EEBEC-D69E-4C50-AE4F-099DFD40458D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumerableExtensionMethodsTest", "EnumerableExtensionMethodsTest\EnumerableExtensionMethodsTest.csproj", "{C1E83E72-8EFC-4C18-AAC6-B0F03652073D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Console", "Testing.Console\Testing.Console.csproj", "{1AEAF485-DD4C-45ED-93CA-D29FC3CD3F33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonaLisaApproximation", "MonaLisaApproximation\MonaLisaApproximation.csproj", "{C23D3628-6F73-43E1-82FB-B1AC5E487503}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlogirthmTests", "GeneticAlogirthmTests\GeneticAlogirthmTests.csproj", "{700961BB-66B4-430C-AB05-745AE9B9A87B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Sequential", "Testing.Sequential\Testing.Sequential.csproj", "{9E49BD54-3FFA-4B93-883A-2D6BDD502E95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Parallel", "Testing.Parallel\Testing.Parallel.csproj", "{28104F34-6EC8-4A28-8CCB-4628434717BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,6 @@ Global
 		{74B954B7-7EA4-4961-B121-D87D4FEE8252}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74B954B7-7EA4-4961-B121-D87D4FEE8252}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74B954B7-7EA4-4961-B121-D87D4FEE8252}.Release|Any CPU.Build.0 = Release|Any CPU
-		{453EEBEC-D69E-4C50-AE4F-099DFD40458D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{453EEBEC-D69E-4C50-AE4F-099DFD40458D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{453EEBEC-D69E-4C50-AE4F-099DFD40458D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{453EEBEC-D69E-4C50-AE4F-099DFD40458D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1E83E72-8EFC-4C18-AAC6-B0F03652073D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C1E83E72-8EFC-4C18-AAC6-B0F03652073D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1E83E72-8EFC-4C18-AAC6-B0F03652073D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,9 +34,13 @@ Global
 		{C23D3628-6F73-43E1-82FB-B1AC5E487503}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C23D3628-6F73-43E1-82FB-B1AC5E487503}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C23D3628-6F73-43E1-82FB-B1AC5E487503}.Release|Any CPU.Build.0 = Release|Any CPU
-		{700961BB-66B4-430C-AB05-745AE9B9A87B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{700961BB-66B4-430C-AB05-745AE9B9A87B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{700961BB-66B4-430C-AB05-745AE9B9A87B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{700961BB-66B4-430C-AB05-745AE9B9A87B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E49BD54-3FFA-4B93-883A-2D6BDD502E95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E49BD54-3FFA-4B93-883A-2D6BDD502E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E49BD54-3FFA-4B93-883A-2D6BDD502E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E49BD54-3FFA-4B93-883A-2D6BDD502E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28104F34-6EC8-4A28-8CCB-4628434717BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28104F34-6EC8-4A28-8CCB-4628434717BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28104F34-6EC8-4A28-8CCB-4628434717BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28104F34-6EC8-4A28-8CCB-4628434717BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
