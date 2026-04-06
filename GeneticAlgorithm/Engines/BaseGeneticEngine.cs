@@ -10,7 +10,7 @@ public abstract class BaseGeneticEngine<TChromosome>
     private readonly IMutationStrategy<TChromosome> _mutationStrategy;
     private readonly ISelectionStrategy<TChromosome> _selectionStrategy;
     private readonly IIndividualFactory<TChromosome> _factory;
-    private readonly int _populationSize;
+    public int PopulationSize { get; set; }
     private readonly int _elitismCount;
     private readonly int _mutationRate;
 
@@ -29,15 +29,15 @@ public abstract class BaseGeneticEngine<TChromosome>
         _mutationStrategy = mutationStrategy;
         _selectionStrategy = selectionStrategy;
         _factory = factory;
-        _populationSize = populationSize;
+        PopulationSize = populationSize;
         _elitismCount = elitismCount;
         _mutationRate = mutationRate;
     }
 
     public TChromosome Run(int generations)
     {
-        var initialChromosomes = new List<TChromosome>(_populationSize);
-        for (int i = 0; i < _populationSize; i++)
+        var initialChromosomes = new List<TChromosome>(PopulationSize);
+        for (int i = 0; i < PopulationSize; i++)
         {
             initialChromosomes.Add(_factory.CreateRandomChromosome());
         }
