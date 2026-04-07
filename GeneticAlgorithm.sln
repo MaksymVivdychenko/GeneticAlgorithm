@@ -4,13 +4,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlgorithm", "Genetic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumerableExtensionMethodsTest", "EnumerableExtensionMethodsTest\EnumerableExtensionMethodsTest.csproj", "{C1E83E72-8EFC-4C18-AAC6-B0F03652073D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Console", "Testing.Console\Testing.Console.csproj", "{1AEAF485-DD4C-45ED-93CA-D29FC3CD3F33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Sequential", "Testing.Sequential\Testing.Sequential.csproj", "{1AEAF485-DD4C-45ED-93CA-D29FC3CD3F33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonaLisaApproximation", "MonaLisaApproximation\MonaLisaApproximation.csproj", "{C23D3628-6F73-43E1-82FB-B1AC5E487503}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Sequential", "Testing.Sequential\Testing.Sequential.csproj", "{9E49BD54-3FFA-4B93-883A-2D6BDD502E95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.SequentialCorrectness", "Testing.SequentialCorrectness\Testing.SequentialCorrectness.csproj", "{9E49BD54-3FFA-4B93-883A-2D6BDD502E95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Parallel", "Testing.Parallel\Testing.Parallel.csproj", "{28104F34-6EC8-4A28-8CCB-4628434717BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelGACorrectnessTests", "ParallelGACorrectnessTests\ParallelGACorrectnessTests.csproj", "{38A3F23C-8065-46E8-A3AC-A0ED15D2FD8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +44,9 @@ Global
 		{28104F34-6EC8-4A28-8CCB-4628434717BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28104F34-6EC8-4A28-8CCB-4628434717BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28104F34-6EC8-4A28-8CCB-4628434717BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A3F23C-8065-46E8-A3AC-A0ED15D2FD8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A3F23C-8065-46E8-A3AC-A0ED15D2FD8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A3F23C-8065-46E8-A3AC-A0ED15D2FD8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A3F23C-8065-46E8-A3AC-A0ED15D2FD8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
