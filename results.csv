@@ -1,7 +1,0 @@
-Engine;ThreadCount;Generations;AvgTimeMs
-Engine by ThreadPool;8;1750;10966
-Engine by ThreadPool;8;2000;11492
-Engine by ThreadPool;9;1750;10917
-Engine by ThreadPool;9;2000;17145
-Engine by ThreadPool;10;1750;18740
-Engine by ThreadPool;10;2000;23005
